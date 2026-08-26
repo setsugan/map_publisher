@@ -13,21 +13,20 @@ namespace map_publisher {
 class map_publisher : public rclcpp::Node {
 public:
     explicit map_publisher(const rclcpp::NodeOptions & node_options);
-    ~map_publisher();
 
 private:
-    bool                         load_and_publish_map();
-    bool                         load_yaml();
-    cv::Mat                      load_image() const;
-    nav_msgs::msg::OccupancyGrid create_occupancy_grid(cv::Mat image) const;
+    struct MapConfig {
+        std::string         image_path;
+        double              resolution;
+        std::vector<double> origin;
+        double              occupied_threshold;
+        double              free_threshold;
+        bool                negate;
+    };
 
-    std::string         map_yaml_path_;
-    std::string         image_path_;
-    double              resolution_{};
-    std::vector<double> origin_;
-    double              occupied_threshold_{};
-    double              free_threshold_{};
-    int                 negate_{};
+    static MapConfig                    load_map_config(const std::string & map_yaml_path);
+    static nav_msgs::msg::OccupancyGrid create_occupancy_grid(const cv::Mat & image, const MapConfig & config);
+    static nav_msgs::msg::OccupancyGrid load_map(const std::string & map_yaml_path);
 
     rclcpp::Publisher<nav_msgs::msg::OccupancyGrid>::SharedPtr publisher_;
 };
