@@ -10,10 +10,10 @@
 
 namespace map_publisher {
 
-class MapPublisher : public rclcpp::Node {
+class map_publisher : public rclcpp::Node {
 public:
-    explicit MapPublisher(const rclcpp::NodeOptions & node_options);
-    ~MapPublisher();
+    explicit map_publisher(const rclcpp::NodeOptions & node_options);
+    ~map_publisher();
 
 private:
     bool                         load_and_publish_map();

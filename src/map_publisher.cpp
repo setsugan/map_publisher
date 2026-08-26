@@ -12,7 +12,7 @@
 
 namespace map_publisher {
 
-MapPublisher::MapPublisher(const rclcpp::NodeOptions & node_options) : Node("map_publisher", node_options) {
+map_publisher::map_publisher(const rclcpp::NodeOptions & node_options) : Node("map_publisher", node_options) {
     map_yaml_path_ = this->declare_parameter<std::string>("map_yaml_path", "");
     if (map_yaml_path_.empty()) {
         throw std::invalid_argument("parameter 'map_yaml_path' must not be empty");
@@ -28,11 +28,11 @@ MapPublisher::MapPublisher(const rclcpp::NodeOptions & node_options) : Node("map
     }
 }
 
-MapPublisher::~MapPublisher() {
+map_publisher::~map_publisher() {
     // nop
 }
 
-bool MapPublisher::load_and_publish_map() {
+bool map_publisher::load_and_publish_map() {
     if (!this->load_yaml()) {
         return false;
     }
@@ -51,7 +51,7 @@ bool MapPublisher::load_and_publish_map() {
     return true;
 }
 
-bool MapPublisher::load_yaml() {
+bool map_publisher::load_yaml() {
     try {
         const YAML::Node  yaml = YAML::LoadFile(map_yaml_path_);
         const std::string mode = yaml["mode"].as<std::string>("trinary");
@@ -80,7 +80,7 @@ bool MapPublisher::load_yaml() {
     return true;
 }
 
-cv::Mat MapPublisher::load_image() const {
+cv::Mat map_publisher::load_image() const {
     const cv::Mat image = cv::imread(image_path_, cv::IMREAD_GRAYSCALE);
     if (image.empty()) {
         RCLCPP_ERROR(this->get_logger(), "Failed to load map image: %s", image_path_.c_str());
@@ -89,7 +89,7 @@ cv::Mat MapPublisher::load_image() const {
     return image;
 }
 
-nav_msgs::msg::OccupancyGrid MapPublisher::create_occupancy_grid(cv::Mat image) const {
+nav_msgs::msg::OccupancyGrid map_publisher::create_occupancy_grid(cv::Mat image) const {
     nav_msgs::msg::OccupancyGrid map;
     map.header.frame_id           = "map";
     map.info.resolution           = static_cast<float>(resolution_);
@@ -122,4 +122,4 @@ nav_msgs::msg::OccupancyGrid MapPublisher::create_occupancy_grid(cv::Mat image) 
 }  // namespace map_publisher
 
 #include "rclcpp_components/register_node_macro.hpp"
-RCLCPP_COMPONENTS_REGISTER_NODE(map_publisher::MapPublisher)
+RCLCPP_COMPONENTS_REGISTER_NODE(map_publisher::map_publisher)

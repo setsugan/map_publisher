@@ -11,7 +11,7 @@ ament_auto_add_library(${PROJECT_NAME} SHARED
 target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS} yaml-cpp::yaml-cpp)
 
 rclcpp_components_register_node(${PROJECT_NAME}
-    PLUGIN "map_publisher::MapPublisher"
+    PLUGIN "map_publisher::map_publisher"
     EXECUTABLE map_publisher_node
 )
 
