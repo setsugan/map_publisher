@@ -1,0 +1,36 @@
+name: Format
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.clang-format'
+      - 'include/**/*.h'
+      - 'include/**/*.hpp'
+      - 'src/**/*.cpp'
+      - '.github/workflows/format.yml'
+  pull_request:
+    paths:
+      - '.clang-format'
+      - 'include/**/*.h'
+      - 'include/**/*.hpp'
+      - 'src/**/*.cpp'
+      - '.github/workflows/format.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  clang-format:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install clang-format
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang-format
+
+      - name: Check formatting
+        run: |
+          find include src -type f \( -name '*.cpp' -o -name '*.h' -o -name '*.hpp' \) -exec clang-format --dry-run --Werror {} +
