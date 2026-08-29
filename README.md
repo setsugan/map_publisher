@@ -11,6 +11,7 @@
 | パラメータ名 | 型 | デフォルト値 | 説明 |
 | --- | --- | --- | --- |
 | map_yaml_path | string |  | 地図YAMLファイルのパス |
+| frame_id | string | map | フレームID |
 
 ## パブリッシャー
 

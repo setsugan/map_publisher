@@ -30,11 +30,13 @@ map_publisher::map_publisher(const rclcpp::NodeOptions & node_options) : Node("m
     if (map_yaml_path.empty()) {
         throw std::invalid_argument("parameter 'map_yaml_path' must not be empty");
     }
+    const std::string frame_id = this->declare_parameter<std::string>("frame_id", "map");
 
     publisher_ = this->create_publisher<nav_msgs::msg::OccupancyGrid>("map", rclcpp::QoS(1).reliable().transient_local());
 
     auto map               = load_map(map_yaml_path);
     map.header.stamp       = this->now();
+    map.header.frame_id    = frame_id;
     map.info.map_load_time = map.header.stamp;
     publisher_->publish(map);
 
